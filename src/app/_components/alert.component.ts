@@ -25,7 +25,7 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.alertSubscription = this.alertService.onAlert(this.id)
-            .subcribe(alert => {
+            .subscribe(alert => {
                 if (!alert.message) {
                     this.alerts = this.alerts.filter(x => x.keepAfterRouteChange);
                     this.alerts.forEach(x => delete x.keepAfterRouteChange);
@@ -40,6 +40,57 @@ export class AlertComponent implements OnInit, OnDestroy {
                     setTimeout(() => this.removeAlert(alert), 3000);
                 }
             });
-    }
+
+            this.routeSubcription = this.router.events.subscribe(event => {
+                if (event instanceof NavigationStart) {
+                    this.alertService.clear(this.id);
+                    this.scheduleDetectChanges();
+                }
+            });    
+        }
+        
+        ngOnDestroy() {
+            this.alertSubscription.unsubscribe();
+            this.routeSubcription.unsubscribe();
+        }
+
+        removeAlert(alert: Alert) {
+            if (!this.alerts.includes(alert)) return;
+
+            if (this.fade) {
+                alert.fade = true;
+                this.scheduleDetectChanges();
+
+                setTimeout(() => {
+                    this.alerts = this.alerts.filter(x => x !== alert);
+                    this.scheduleDetectChanges();
+                }, 250);
+            } else {
+                this.alerts = this.alerts.filter(x => x !== alert);
+                this.scheduleDetectChanges();}
+        }
+
+        cssClasses(alert: Alert) {
+            if (!alert) return;
+
+            const classes = ['alert', 'alert-dismissable', 'mt-4', 'container'];
+
+            const alertTypeClass = {
+                [AlertType.Success]: 'alert-success',
+                [AlertType.Error]: 'alert-danger',
+                [AlertType.Info]: 'alert-info',
+                [AlertType.Warning]: 'alert-warning'
+            }
+
+            if (alert.type !== undefined) {
+                classes.push(alertTypeClass[alert.type]);
+            }
+
+            if (alert.fade) {
+                classes.push('fade');
+            }
+
+            return classes.join(' ');
+        }
 
 }
