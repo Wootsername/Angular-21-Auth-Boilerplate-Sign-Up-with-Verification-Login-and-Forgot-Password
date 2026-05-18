@@ -38,8 +38,10 @@ export class ResetPasswordComponent implements OnInit {
 				next: () => {
 					this.token = token;
 					this.tokenStatus = 'valid';
-					// remove token from url to prevent http referer leakage
-					this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
+					// remove token from url to prevent http referer leakage without triggering Angular route change
+					if (window.history.replaceState) {
+						window.history.replaceState({}, '', window.location.pathname);
+					}
 				},
 				error: () => {
 					this.tokenStatus = 'invalid';

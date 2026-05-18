@@ -24,8 +24,10 @@ export class VerifyEmailComponent implements OnInit {
 	ngOnInit() {
 		const token = this.route.snapshot.queryParams['token'];
 
-		// remove token from url to prevent http referer leakage
-		this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
+		// remove token from url to prevent http referer leakage without triggering Angular route change
+		if (window.history.replaceState) {
+			window.history.replaceState({}, '', window.location.pathname);
+		}
 
 		this.accountService.verifyEmail(token)
 			.pipe(first())
