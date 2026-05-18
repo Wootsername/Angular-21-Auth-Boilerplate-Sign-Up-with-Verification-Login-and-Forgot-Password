@@ -6,16 +6,9 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '@app/_services';
 import { MustMatch } from '@app/_helpers';
 
-enum TokenStatus {
-	Validating,
-	Valid,
-	Invalid
-}
-
 @Component({ templateUrl: 'reset-password.component.html', standalone: false })
 export class ResetPasswordComponent implements OnInit {
-	TokenStatus = TokenStatus;
-	tokenStatus = TokenStatus.Validating;
+	tokenStatus = 'validating';
 	token?: string;
 	form!: FormGroup;
 	loading = false;
@@ -47,10 +40,10 @@ export class ResetPasswordComponent implements OnInit {
 			.subscribe({
 				next: () => {
 					this.token = token;
-					this.tokenStatus = TokenStatus.Valid;
+					this.tokenStatus = 'valid';
 				},
 				error: () => {
-					this.tokenStatus = TokenStatus.Invalid;
+					this.tokenStatus = 'invalid';
 				}
 			});
 	}
