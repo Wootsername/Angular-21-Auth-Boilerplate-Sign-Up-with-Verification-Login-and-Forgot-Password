@@ -8,9 +8,9 @@ Features: Email sign-up with verification, JWT login/logout, refresh tokens (htt
 
 | Service | URL |
 |---------|-----|
-| **Frontend (Netlify)** | `https://YOUR-FRONTEND.netlify.app` |
-| **Backend API (Render)** | `https://YOUR-BACKEND.onrender.com` |
-| **API Docs (Swagger)** | `https://YOUR-BACKEND.onrender.com/api-docs` |
+| **Frontend (Netlify)** | `https://jolly-valkyrie-e7a535.netlify.app` |
+| **Backend API (Render)** | `https://auth-system-backend-j7xw.onrender.com` |
+| **API Docs (Swagger)** | `https://auth-system-backend-j7xw.onrender.com/api-docs` |
 
 ## Quick Start
 
